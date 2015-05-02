@@ -28,17 +28,17 @@ def eval_nextVel(objects, myBody_it):
         #if idx == myBody_it: continue
         r = ((myBody.position[0] - other.position[0])**2 + (myBody.position[1] - other.position[1])**2 + (myBody.position[2] - other.position[2])**2)**(1./2.) #distance between myBody and other
         if(r != 0):
-            myBody.speed[0] += -G*(other.mass)*(myBody.position[0] - other.position[0])/r
-            myBody.speed[1] += -G*(other.mass)*(myBody.position[1] - other.position[1])/r
-            myBody.speed[2] += -G*(other.mass)*(myBody.position[2] - other.position[2])/r
+            myBody.speed[0] += -G*(other.mass)*(myBody.position[0] - other.position[0])/r**2
+            myBody.speed[1] += -G*(other.mass)*(myBody.position[1] - other.position[1])/r**2
+            myBody.speed[2] += -G*(other.mass)*(myBody.position[2] - other.position[2])/r**2
         idx +=1
 
     return myBody.speed
 
 def next_pos(object):
-    object.position[0]+=object.speed[0]
-    object.position[1]+=object.speed[1]
-    object.position[2]+=object.speed[2]
+    object.position[0]+=0.001*object.speed[0]
+    object.position[1]+=0.001*object.speed[1]
+    object.position[2]+=0.001*object.speed[2]
     return object.position
 
 
