@@ -62,8 +62,8 @@ def main():
     screen = pygame.display.set_mode([WIDTH,HEIGHT])
     CLOCK = pygame.time.Clock()
 
-    body0 = body.object(1000,7,(255,0,0),[400,200,0],[0,-100,0])
-    body1 = body.object(1000,7,(0,255,0),[200,200,0],[0,100,0])
+    body0 = body.object(1000,7,(255,0,0),[400,200,0],[0,-1000,0])
+    body1 = body.object(1000,7,(0,255,0),[200,200,0],[0,1000,0])
     body2 = body.object(0.01,7,(0,0,255),[300,200,0],[0,0,0])
 
     bodies =[body1, body2, body0]
