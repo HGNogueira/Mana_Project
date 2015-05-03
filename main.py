@@ -14,6 +14,10 @@ def draw_next_with_steps(bodies, step,screen):
 def draw_centerOfMass(bodies, screen):
     posCM = gSim.get_centerOfMass(bodies)
     pygame.draw.circle(screen,(255,255,255),(int(posCM[0]),int(posCM[1])),1)
+def draw_current(bodies, screen):
+    for body in bodies:
+        pygame.draw.circle(screen,body.color,[int(body.position[0]),int(body.position[1])],body.radius)
+
 
 def print_totalEnergy(bodies,screen, f, iteration):
     kinetic = 0
@@ -33,26 +37,6 @@ def print_totalEnergy(bodies,screen, f, iteration):
     totalEnergy =potential + kinetic
     print "Total = " + str(totalEnergy)      
     f.write(str(iteration) + " " + str(kinetic) + " " + str(potential) + " " + str(totalEnergy) + "\n")
-
-def new_body_click(bodies):
-    mouseDown = pygame.mouse.get_pos()
-    mouseUp = []
-    wait = True
-    while wait:
-        for event in pygame.event.get(): 
-            if event.type == MOUSEBUTTONUP:
-                mouseUp = pygame.mouse.get_pos()
-                wait = False
-                break
-                
-    newSpeed = [0,0]
-    newSpeed[0] = float(10*(mouseUp[0]-mouseDown[0]))
-    newSpeed[1] = float(10*(mouseUp[1]-mouseDown[1]))
-    print newSpeed
-    
-    newbody = gSim.body(6*10**2,1,(0,255,0),[mouseDown[0],mouseDown[1],0.],[newSpeed[0],newSpeed[1],0.])
-    bodies.append(newbody)
-
 
 def main():
     pygame.init()
@@ -76,7 +60,29 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == MOUSEBUTTONDOWN:
-                new_body_click(bodies)
+                mouseDown = pygame.mouse.get_pos()
+                mouseUp = []
+                wait = True
+                while wait:
+                    screen.fill((0,0,0))
+                    pygame.draw.line(screen, (100,100,100), mouseDown, pygame.mouse.get_pos(), 1)
+                    draw_current(bodies, screen)
+                    draw_centerOfMass(bodies,screen)
+                    pygame.display.flip()
+                    for event in pygame.event.get(): 
+                        if event.type == MOUSEBUTTONUP:
+                            mouseUp = pygame.mouse.get_pos()
+                            wait = False
+                            break
+                
+                newSpeed = [0,0]
+                newSpeed[0] = float(10*(mouseUp[0]-mouseDown[0]))
+                newSpeed[1] = float(10*(mouseUp[1]-mouseDown[1]))
+    
+                newbody = gSim.body(6*10**2,1,(0,255,0),[mouseDown[0],mouseDown[1],0.],[newSpeed[0],newSpeed[1],0.])
+                bodies.append(newbody)
+                
+
 
         draw_next_with_steps(bodies, 0.0001, screen)
         draw_centerOfMass(bodies,screen)
