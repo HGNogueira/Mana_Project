@@ -1,0 +1,32 @@
+"""In this python module we try to simulate the behaviour of free moving bodies interacting only through gravitational force. It is composed by:
+  -Class body, that simply stores information regarding a specific body with mass
+  -Functions that calculate the next position of a list(body1,body2,...) given their current status
+
+  G is the gravitational constant
+"""
+G = 6.67*10**-11
+
+
+class object(object):
+    def __init__(self, mass, radius, color, position, speed):
+        self.mass = mass
+        self.radius = radius
+        self.color = color 
+        self.position = position
+        self.speed = speed
+        
+def eval_nextVel(objects, myBody_it):
+    #This class returns velocity at time t+dt
+    myBody=objects[myBody_it]
+    idx = 0 
+    
+    for other in objects:
+        #if idx == myBody_it: continue
+        r = ((myBody.position[0] - other.position[0])**2 + (myBody.position[1] - other.position[1])**2 + (myBody.position[2] - other.position[2])**2)**(1./2.) #distance between myBody and other
+        if(r != 0):
+            myBody.speed[0] += -0.0001*G*(other.mass)*(myBody.position[0] - other.position[0])/r**2
+            myBody.speed[1] += -0.0001*G*(other.mass)*(myBody.position[1] - other.position[1])/r**2
+            myBody.speed[2] += -0.0001*G*(other.mass)*(myBody.position[2] - other.position[2])/r**2
+        idx +=1
+
+    return myBody.speed
