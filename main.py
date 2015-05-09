@@ -1,4 +1,5 @@
 import pygame, gSim, sys
+
 from pygame.locals import *
 import time
 import numpy as np
@@ -29,59 +30,6 @@ def matrix_vec_mult(matrix, vec):
     return new_vec
 
 
-def draw_z_axis(theta, screen):
-    start_axis = [0, 0 , -500]
-    end_axis = [0, 0, 500]
-    x_rot_matrix=[ [1, 0, 0],
-                   [0, cos(-theta[0]), sin(-theta[0])],
-                   [0, sin(-theta[0]), cos(-theta[0])]]
-    
-    y_rot_matrix=[ [cos(-theta[1]), 0, sin(-theta[1])],
-                   [0, 1, 0],
-                   [-sin(-theta[1]), 0, cos(-theta[1])]]
-
-
-    z_rot_matrix=[ [cos(-theta[2]), -sin(-theta[2]), 0],
-                   [sin(-theta[2]), cos(-theta[2]), 0],
-                   [0, 0, 1]]
-
-    start_axis = matrix_vec_mult(x_rot_matrix, start_axis)
-    start_axis = matrix_vec_mult(z_rot_matrix, start_axis)
-    start_axis = matrix_vec_mult(y_rot_matrix, start_axis)
-
-
-    end_axis = matrix_vec_mult(x_rot_matrix, end_axis)
-    end_axis = matrix_vec_mult(z_rot_matrix, end_axis)
-    end_axis = matrix_vec_mult(y_rot_matrix, end_axis)
-
-    pygame.draw.line(screen, (255,255,255), [int(start_axis[0] + WIDTH/2), int(start_axis[1] + HEIGHT/2)] ,[int(end_axis[0] + WIDTH/2), int(end_axis[1] + HEIGHT/2)], 1)
-
-def draw_y_axis(theta, screen):
-    start_axis = [0, -500 , 0]
-    end_axis = [0, 500, 0]
-    x_rot_matrix=[ [1, 0, 0],
-                   [0, cos(-theta[0]), sin(-theta[0])],
-                   [0, sin(-theta[0]), cos(-theta[0])]]
-    y_rot_matrix=[ [cos(-theta[1]), 0, sin(-theta[1])],
-                   [0, 1, 0],
-                   [-sin(-theta[1]), 0, cos(-theta[1])]]
-
-    z_rot_matrix=[ [cos(-theta[2]), -sin(-theta[2]), 0],
-                   [sin(-theta[2]), cos(-theta[2]), 0],
-                   [0, 0, 1]]
-
-    start_axis = matrix_vec_mult(x_rot_matrix, start_axis)
-    start_axis = matrix_vec_mult(z_rot_matrix, start_axis)
-    start_axis = matrix_vec_mult(y_rot_matrix, start_axis)
-    
-    end_axis = matrix_vec_mult(x_rot_matrix, end_axis)
-    end_axis = matrix_vec_mult(z_rot_matrix, end_axis)
-    end_axis = matrix_vec_mult(y_rot_matrix, end_axis)
-
-    pygame.draw.line(screen, (255,255,255), [int(start_axis[0] + WIDTH/2), int(start_axis[1] + HEIGHT/2)] ,[int(end_axis[0] + WIDTH/2), int(end_axis[1] + HEIGHT/2)], 1)
-
-
-
 def draw_x_axis(theta, screen):
     start_axis = [-500, 0 , 0]
     end_axis = [500, 0, 0]
@@ -97,15 +45,71 @@ def draw_x_axis(theta, screen):
                    [sin(-theta[2]), cos(-theta[2]), 0],
                    [0, 0, 1]]
 
-    start_axis = matrix_vec_mult(x_rot_matrix, start_axis)
     start_axis = matrix_vec_mult(z_rot_matrix, start_axis)
     start_axis = matrix_vec_mult(y_rot_matrix, start_axis)
+    start_axis = matrix_vec_mult(x_rot_matrix, start_axis)
     
-    end_axis = matrix_vec_mult(x_rot_matrix, end_axis)
     end_axis = matrix_vec_mult(z_rot_matrix, end_axis)
     end_axis = matrix_vec_mult(y_rot_matrix, end_axis)
+    end_axis = matrix_vec_mult(x_rot_matrix, end_axis)
 
-    pygame.draw.line(screen, (255,255,255), [int(start_axis[0] + WIDTH/2), int(start_axis[1] + HEIGHT/2)] ,[int(end_axis[0] + WIDTH/2), int(end_axis[1] + HEIGHT/2)], 1)
+    pygame.draw.line(screen, (255,0,0), [int(start_axis[0] + WIDTH/2), int(start_axis[1] + HEIGHT/2)] ,[int(end_axis[0] + WIDTH/2), int(end_axis[1] + HEIGHT/2)], 1)
+
+    
+
+
+def draw_y_axis(theta, screen):
+    start_axis = [0 , -500 , 0]
+    end_axis = [0, 500, 0]
+    x_rot_matrix=[ [1, 0, 0],
+                   [0, cos(-theta[0]), sin(-theta[0])],
+                   [0, sin(-theta[0]), cos(-theta[0])]]
+
+    y_rot_matrix=[ [cos(-theta[1]), 0, sin(-theta[1])],
+                   [0, 1, 0],
+                   [-sin(-theta[1]), 0, cos(-theta[1])]]
+
+    z_rot_matrix=[ [cos(-theta[2]), -sin(-theta[2]), 0],
+                   [sin(-theta[2]), cos(-theta[2]), 0],
+                   [0, 0, 1]]
+
+    start_axis = matrix_vec_mult(z_rot_matrix, start_axis)
+    start_axis = matrix_vec_mult(y_rot_matrix, start_axis)
+    start_axis = matrix_vec_mult(x_rot_matrix, start_axis)
+    
+    end_axis = matrix_vec_mult(z_rot_matrix, end_axis)
+    end_axis = matrix_vec_mult(y_rot_matrix, end_axis)
+    end_axis = matrix_vec_mult(x_rot_matrix, end_axis)
+
+    pygame.draw.line(screen, (0,255,0), [int(start_axis[0] + WIDTH/2), int(start_axis[1] + HEIGHT/2)] ,[int(end_axis[0] + WIDTH/2), int(end_axis[1] + HEIGHT/2)], 1)
+
+    
+
+
+def draw_z_axis(theta, screen):
+    start_axis = [0, 0 , -500]
+    end_axis = [0, 0, 500]
+    x_rot_matrix=[ [1, 0, 0],
+                   [0, cos(-theta[0]), sin(-theta[0])],
+                   [0, sin(-theta[0]), cos(-theta[0])]]
+
+    y_rot_matrix=[ [cos(-theta[1]), 0, sin(-theta[1])],
+                   [0, 1, 0],
+                   [-sin(-theta[1]), 0, cos(-theta[1])]]
+
+    z_rot_matrix=[ [cos(-theta[2]), -sin(-theta[2]), 0],
+                   [sin(-theta[2]), cos(-theta[2]), 0],
+                   [0, 0, 1]]
+
+    start_axis = matrix_vec_mult(z_rot_matrix, start_axis)
+    start_axis = matrix_vec_mult(y_rot_matrix, start_axis)
+    start_axis = matrix_vec_mult(x_rot_matrix, start_axis)
+    
+    end_axis = matrix_vec_mult(z_rot_matrix, end_axis)
+    end_axis = matrix_vec_mult(y_rot_matrix, end_axis)
+    end_axis = matrix_vec_mult(x_rot_matrix, end_axis)
+
+    pygame.draw.line(screen, (0,0,255), [int(start_axis[0] + WIDTH/2), int(start_axis[1] + HEIGHT/2)] ,[int(end_axis[0] + WIDTH/2), int(end_axis[1] + HEIGHT/2)], 1)
 
     
 def draw_axis(theta, screen):
@@ -115,7 +119,6 @@ def draw_axis(theta, screen):
 
 def draw_next_with_steps(bodies, step,screen, theta):
     gSim.next_pos_with_steps(bodies, step)
-    #x axis rotation matrix
     x_rot_matrix=[ [1, 0, 0],
                    [0, cos(-theta[0]), sin(-theta[0])],
                    [0, sin(-theta[0]), cos(-theta[0])]]
@@ -131,9 +134,9 @@ def draw_next_with_steps(bodies, step,screen, theta):
 
 
     for body in bodies:
-        draw_pos = matrix_vec_mult(x_rot_matrix, body.position)
-        draw_pos = matrix_vec_mult(z_rot_matrix, draw_pos)
+        draw_pos = matrix_vec_mult(z_rot_matrix, body.position)
         draw_pos = matrix_vec_mult(y_rot_matrix, draw_pos)
+        draw_pos = matrix_vec_mult(x_rot_matrix, draw_pos)
         pygame.draw.circle(screen,body.color,[int(draw_pos[0] + WIDTH/2),int(draw_pos[1] + HEIGHT/2)],body.radius)
         
 
@@ -183,6 +186,13 @@ def main():
     REALTIMEGRAPH = False
     Trail = False
     theta = [0, 0, 0]
+    
+    down = False
+    up = False
+    right = False
+    left = False
+
+
 
     plt.axis([0,1000,0,0.5*10**10])
     plt.ylabel('Energies')
@@ -201,21 +211,19 @@ def main():
     while True:
         for event in pygame.event.get():
             #print str(event)
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 if event.key == pygame.K_f:
                     Trail = not Trail
                 if event.key == pygame.K_e:
                     del bodies[len(bodies)-1]
                 if event.key == pygame.K_DOWN:
-                    theta[0] += 0.3
+                    down = not down
                 if event.key == pygame.K_UP:
-                    theta[0] -= 0.3
+                    up = not up
                 if event.key == pygame.K_RIGHT:
-                    theta[2] += 0.3
+                    right = not right
                 if event.key == pygame.K_LEFT:
-                    theta[2] -= 0.3
-                if event.key == pygame.K_y:
-                    theta[1] -= 0.3    
+                    left = not left
 
             if event.type == pygame.QUIT:
                 return 0
@@ -244,6 +252,15 @@ def main():
                 
         if not Trail:
             screen.fill((0,0,0)) 
+        if up:
+            theta[0] -= 0.01
+        if down:
+            theta[0] += 0.01
+        if right:
+            theta[2] -= 0.01
+        if left:
+            theta[2] += 0.01    
+
 
         draw_axis(theta, screen)
         draw_next_with_steps(bodies, 0.0001, screen, theta)
