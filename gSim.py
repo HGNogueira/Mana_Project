@@ -55,66 +55,60 @@ def nextValues_restricted_m3(bodies, step):
     bodies[2].position[0] += bodies[2].speed[0]*step
     bodies[2].position[1] += bodies[2].speed[1]*step
 
-"""
-def acc(bodies,it,ncoord,x):
-        
-        if ncoord == 0:
-            a = -step*G*(bodies[idx].mass)*(bodies[it].position[0] - bodies[idx].position[0])/r**3
+def a(x,it,ncoord,step,bodies):
+      
+    ac = 0
+    for i in range(3):
+	if i == it: continue
+	r = ((x[it][0]-x[i][0])**2 + (x[it][1]-x[i][1])**2 + (x[it][2]-x[i][2])**2)**(0.5)
+        if r>=0:
+            ac += -G*(bodies[i].mass)*(x[it][ncoord] - x[i][ncoord])/r**3
+	i+=1
 
-        if ncoord == 1:
-            a = -step*G*(bodies[idx].mass)*(bodies[it].position[1] - bodies[idx].position[1])/r**3
-
-        if ncoord == 2:
-            a = -step*G*(bodies[idx].mass)*(bodies[it].position[2] - bodies[idx].position[2])/r**3
-
-        idx+=1
-
-    return a
+    return ac
             
 
 def RK4(bodies,step):
-    for it in range(len(bodies)):
-        x[it] = (bodies[it].position[0],bodies[it].position[1],bodies[it].position[2])
-        v[it] = (bodies[it].speed[0],bodies[it].speed[1],bodies[it].speed[2])
-        #a = acc(bodies,it,x)
+
+    x = [[bodies[0].position[0],bodies[0].position[1],bodies[0].position[2]]
+         ,[bodies[1].position[0],bodies[1].position[1],bodies[1].position[2]]
+         ,[bodies[2].position[0],bodies[2].position[1],bodies[2].position[2]]]
+    v = [[bodies[0].speed[0],bodies[0].speed[1],bodies[0].speed[2]]
+         ,[bodies[1].speed[0],bodies[1].speed[1],bodies[1].speed[2]]
+         ,[bodies[2].speed[0],bodies[2].speed[1],bodies[2].speed[2]]]
+
+    x1 = [[x[0][0],x[0][1],x[0][2]]
+          ,[x[1][0],x[1][1],x[1][2]]
+          ,[x[2][0],x[2][1],x[2][2]]]
+    v1 = [[v[0][0],v[0][1],v[0][2]]
+          ,[v[1][0],v[1][1],v[1][2]]
+          ,[v[2][0],v[2][1],v[2][2]]]
+    a1 = [[a(x1,0,0,step,bodies),a(x1,0,1,step,bodies),a(x1,0,2,step,bodies)]
+          ,[a(x1,1,0,step,bodies),a(x1,1,1,step,bodies),a(x1,1,2,step,bodies)]
+          ,[a(x1,2,0,step,bodies),a(x1,2,1,step,bodies),a(x1,2,2,step,bodies)]]
+ 
+    x2 = [[x[0][0] + 0.5*v1[0][0]*step, x[0][1] + 0.5*v1[0][1]*step, x[0][2] + 0.5*v1[0][2]*step],[x[1][0] + 0.5*v1[1][0]*step, x[1][1] + 0.5*v1[1][1]*step, x[1][2] + 0.5*v1[1][2]*step],[x[2][0] + 0.5*v1[2][0]*step, x[2][1] + 0.5*v1[2][1]*step, x[2][2] + 0.5*v1[2][2]*step]]
+    v2 = [[v[0][0] + 0.5*a1[0][0]*step,v[0][1] + 0.5*a1[0][1]*step,v[0][2] + 0.5*a1[0][2]*step],[v[1][0] + 0.5*a1[1][0]*step,v[1][1] + 0.5*a1[1][1]*step,v[1][2] + 0.5*a1[1][2]*step],[v[2][0] + 0.5*a1[2][0]*step,v[2][1] + 0.5*a1[2][1]*step,v[2][2] + 0.5*a1[2][2]*step]]
+    a2 = [[a(x2, 0,0, step/2.0,bodies),a(x2, 0, 1,step/2.0,bodies),a(x2, 0,2, step/2.0,bodies)],[a(x2, 1,0, step/2.0,bodies),a(x2, 1, 1,step/2.0,bodies),a(x2, 1,2, step/2.0,bodies)],[a(x2, 2,0, step/2.0,bodies),a(x2, 2, 1,step/2.0,bodies),a(x2, 2,2, step/2.0,bodies)]]
+
+    x3 = [[x[0][0] + 0.5*v2[0][0]*step,x[0][1] + 0.5*v2[0][1]*step,x[0][2] + 0.5*v2[0][2]*step],[x[1][0] + 0.5*v2[1][0]*step,x[1][1] + 0.5*v2[1][1]*step,x[1][2] + 0.5*v2[1][2]*step],[x[2][0] + 0.5*v2[2][0]*step,x[2][1] + 0.5*v2[2][1]*step,x[2][2] + 0.5*v2[2][2]*step]]
+    v3 = [[v[0][0] + 0.5*a2[0][0]*step,v[0][1] + 0.5*a2[0][1]*step,v[0][2] + 0.5*a2[0][2]*step],[v[1][0] + 0.5*a2[1][0]*step,v[1][1] + 0.5*a2[1][1]*step,v[1][2] + 0.5*a2[1][2]*step],[v[2][0] + 0.5*a2[2][0]*step,v[2][1] + 0.5*a2[2][1]*step,v[2][2] + 0.5*a2[2][2]*step]]
+    a3 = [[a(x3, 0,0, step/2.0,bodies),a(x3, 0, 1,step/2.0,bodies),a(x3, 0, 2,step/2.0,bodies)],[a(x3, 1,0, step/2.0,bodies),a(x3, 1, 1,step/2.0,bodies),a(x3, 1, 2,step/2.0,bodies)],[a(x3, 2,0, step/2.0,bodies),a(x3, 2, 1,step/2.0,bodies),a(x3, 2, 2,step/2.0,bodies)]]
+
+    x4 = [[x[0][0] + v3[0][0]*step,x[0][1] + v3[0][1]*step,x[0][2] + v3[0][2]*step],[x[1][0] + v3[1][0]*step,x[1][1] + v3[1][1]*step,x[1][2] + v3[1][2]*step],[x[2][0] + v3[2][0]*step,x[2][1] + v3[2][1]*step,x[2][2] + v3[2][2]*step]]
+    v4 = [[v[0][0] + a3[0][0]*step,v[0][1] + a3[0][1]*step,v[0][2] + a3[0][2]*step],[v[1][0] + a3[1][0]*step,v[1][1] + a3[1][1]*step,v[1][2] + a3[1][2]*step],[v[2][0] + a3[2][0]*step,v[2][1] + a3[2][1]*step,v[2][2] + a3[2][2]*step]]
+    a4 = [[a(x4, 0,0,step,bodies),a(x4, 0,1,step,bodies),a(x4, 0,2,step,bodies)],[a(x4, 1,0,step,bodies),a(x4, 1,1,step,bodies),a(x4, 1,2,step,bodies)],[a(x4, 2,0,step,bodies),a(x4, 2,1,step,bodies),a(x4, 2,2,step,bodies)]]
+
 
     for it in range(len(bodies)):
-        j=0
-        while j<3:
-            t=0
-            while t<3:
-                x1[t] = x[t][j]
-                v1[t] = v[t][j]
-                t++
-            t=0
-            bdj=0
-            while t<3:
-                if t == it: continue
-                x1aux[bdj] = x1[t]
-                t++
-                bdj++
+	for j in range(3):
+            bodies[it].position[j] += (step/6.0)*(v1[it][j] + 2*v2[it][j] + 2*v3[it][j] + v4[it][j])
+            bodies[it].speed[j] += (step/6.0)*(a1[it][j] + 2*a2[it][j] + 2*a3[it][j] + a4[it][j])
+            #bodies[it].speed[j] += (step)*(a1[it][j])
+            #bodies[it].position[j] += (step)*(bodies[it].speed[j])
+	    j+=1
+        it+=1
 
-            a1 = a(x1aux,x1[it])
-
-            x2 = x[j] + 0.5*v1*step
-            v2 = v[j] + 0.5*a1*step
-            a2 = a(x2, v2, step/2.0)
-
-            x3 = x[j] + 0.5*v2*step
-            v3 = v[j] + 0.5*a2*step
-            a3 = a(x3, v3, step/2.0)
-
-            x4 = x[j] + v3*step
-            v4 = v[j] + a3*step
-            a4 = a(x4, v4)
-
-            xf = x + (step/6.0)*(v1 + 2*v2 + 2*v3 + v4)
-            vf = v + (step/6.0)*(a1 + 2*a2 + 2*a3 + a4)
-
-            j+=1
-
-        return xf, vf
-"""     
 
 def nextVel_with_steps(bodies, step):#already called by nextpos
     """ This functions takes a list of multiple type body changes their velocities to the next iterative value"""
