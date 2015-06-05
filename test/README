@@ -1,6 +1,6 @@
 1-Instalar virtualenv para version control dos pacotes de Python:
 
-	   $ pip install virtualenv
+	   $ pip install --user virtualenv
 2-ir para a pasta com o programa e estabelecer o virtualenv
 	   $ cd my_program_folder  
 	   $ virtualenv venv
