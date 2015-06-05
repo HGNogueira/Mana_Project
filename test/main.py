@@ -265,8 +265,6 @@ def main():
     pygame.init()
     myfont = pygame.font.SysFont("monospace", 15)
 
-    f = open("data.txt", "w")
-    f.write("#iteration || Kinetic || Potential || Mechanical \n")
     iteration = 0
     
     
