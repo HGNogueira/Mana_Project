@@ -1,2 +1,13 @@
-# Mana_Project
-Small project for 3 body gravitational dynamics in 3D space using pygame library
+1-Instalar virtualenv para version control dos pacotes de Python:
+
+	   $ pip install --user virtualenv
+2-ir para a pasta com o programa e estabelecer o virtualenv
+	   $ cd my_program_folder  
+	   $ virtualenv venv
+	   $ source venv/bin/activate
+
+3-Instalar package pygame neste virtualenv
+	   $ pip install hg+http://bitbucket.org/pygame/pygame
+
+4-Correr programa
+	   $ python3 main.py
